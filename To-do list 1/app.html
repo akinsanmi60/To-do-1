@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task list</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        font-family: monospace;
+        box-sizing: border-box;
+    }
+
+    /* these are colors to be use*/
+    :root{
+        --dark: #370617;
+        --darker: #1f2937;
+        --darkest: #111827;
+        --gray: #6b7280;
+        --light: #eee;
+        --pink: #eca899;
+        --purple: #8b5cf6;
+    }
+
+    body{
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: var(--dark);
+        color: #fff;
+        
+    }
+
+    header{
+        padding: 32px 16px;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    header h1{
+        font-size: 35px;
+        font-weight: 600;
+        color: var(--gray);
+        margin-bottom: 5px;
+        margin-left: 10px;
+    }
+
+    #new-task-form{
+        display: flex;
+    }
+
+    input, button{
+        appearance: none;
+        border: none;
+        outline: none;
+        background: none;
+    }
+
+    #new-task-input{
+        flex: 1 1 0%;
+        background-color: var(--darker);
+        padding: 10px;
+        border-radius: 16px;
+        margin-right: 15px;
+        color: var(--light);
+        font-size: 15px;
+    }
+
+    #new-task-input::placeholder{
+        color: var(--gray);
+    }
+
+    #new-task-submit{
+        color: var(--pink);
+        font-size: 15px;
+        font-weight: 700;
+        background-image: linear-gradient(to right, var(--pink), var(--purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        cursor: pointer;
+        transition: 0.5s;
+    }
+
+    #new-task-submit:hover {        
+        opacity: 0.7;
+    }
+
+    #new-task-submit:active {
+        opacity: 0.7;
+    }
+
+    main {
+        flex: 1 1 0%;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+    }
+    
+    .task-list{
+        padding: 16px;
+    }
+
+    .task-list h2{
+        font-size: 24px;
+        font-weight: 300;
+        color: var(--gray);
+        margin-bottom: 16px;
+    }
+
+    .task{ /**/
+        display: flex;
+        justify-content: space-between;
+        background-color: var(--darkest);
+        padding: 9px;
+        border-radius: 15px;
+        margin-bottom: 10px;
+    }
+
+    .content{
+        flex: 1 1 0%;
+    }
+
+    .content .text{
+        color: #fff ;
+        font-size: 16px;
+        width: 100%;
+        transition: 0.4s;
+    }
+
+    .content .text:not(:read-only){
+        color: var(--pink);
+
+    }
+
+    .action{
+        display: flex;
+        margin: 0 -8px;
+    }
+
+    .action button{
+        cursor: pointer;
+        margin: 0 8px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        transition: 00.4s;
+    }
+
+     .action button:hover{        
+        opacity: 0.7;
+    }
+
+    .action button:active {
+        opacity: 0.7;
+    }
+
+    .edit{
+    background-image: linear-gradient(to right, var(--pink), var(--purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }   
+
+    .delete{
+        color: crimson;
+    }
+
+  
+</style> 
+<body>
+    <header>
+        <h1>My Task List</h1>
+        <form id="new-task-form">
+            <input type="text"  id="new-task-input" placeholder="What's your plan?">
+            <input type="submit" id="new-task-submit" value="Add task">
+        </form>
+    </header>
+
+
+
+    <main>
+        <section class="task-list">
+            <h2>Tasks</h2>
+
+            <div id="tasks">
+                <!---<div class="task">
+
+                    <div class="content">
+                        <input type="text"  class="word" value="shinny task" readonly>
+                    </div>
+
+                    <div class="action">
+                        <button class="edit">Edit</button>
+                        <button class="delete">Delete</button>
+                    </div>
+                </div>
+                it was comment out after design the way it suppose to look and will be created with JS--->
+            </div>
+            
+           
+            
+
+        </section>
+        
+
+        
+    </main>
+
+
+
+
+    <script>
+        // the r
+        window.addEventListener('load', ( ) => {
+            const form = document.querySelector('#new-task-form');
+            const input = document.querySelector('#new-task-input'); //the input for typing the list to do
+            const list_el = document.querySelector('#tasks'); // the local respository
+
+          
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const task = input.value; //the input value(text) equals to task
+
+               if (!task) {
+                   alert('Please add a task') 
+                return;
+               }
+               
+               const task_el = document.createElement('div'); //this is creating a div in DOM for tasks to be added
+               task_el.classList.add('task'); 
+
+
+               const task_content_el = document.createElement('div'); //this is creating a div in DOM for task content under created Task div 
+               task_content_el.classList.add('content');   //The CSS for class of content will be added to the Div created
+               
+               task_el.appendChild(task_content_el); //that is adding the content-div inside the task-div
+
+               
+               // inorder to edit or delete a task 
+               const task_input_el = document.createElement('input'); // firstly create an input tag  
+               task_input_el.classList.add('text'); //The CSS for class of text will be added to the Div created
+               task_input_el.type = 'text'; // this indicate the of input created (this is for text only)
+               task_input_el.value = task; // the input.value stored as task is now store as  task_input_el.value for editing or deleting purpose
+               task_input_el.setAttribute('readonly', 'readonly');
+
+
+               task_content_el.appendChild(task_input_el); //that is adding the task_input_el.value inside content-div
+
+              
+               //creating the action div that contains the edit and delete button
+               const task_action_el = document.createElement('div');
+               task_action_el.classList.add('action');
+
+
+               const task_edit_el = document.createElement('button'); // creating the edit button
+               task_edit_el.classList.add('edit');
+               task_edit_el.innerHTML = 'Edit'; // this is writing a text with JS for HTML
+
+
+               const task_delete_el = document.createElement('button'); // creating the delete button
+               task_delete_el.classList.add('delete')
+               task_delete_el.innerHTML = 'Delete'; // this is writing a text with JS for HTML
+
+
+               task_el.appendChild(task_action_el);  // this is adding the action div to the content div
+
+
+               // this is adding the button to the action div
+               task_action_el.appendChild(task_edit_el);
+               task_action_el.appendChild(task_delete_el);
+
+
+
+               list_el.appendChild(task_el); //that is adding the task-div inside the tasks-div
+
+               input.value = ''; // to clear input  when add task button is clicked
+
+
+
+               // This is making the Edit button functional
+               task_edit_el.addEventListener('click', () => {
+                     if (task_edit_el.innerText.toLowerCase() == 'edit') {
+                         
+                        //it will firstly remove the readonly attribute st on task_input_el(content)
+                        task_input_el.removeAttribute('readonly');
+
+                        //After removal of the readonly attribute, then focus on the input
+                        task_input_el.focus();
+
+                        task_edit_el.innerHTML = 'Save'; // This is code that changes the edit text to save when the edit button is click 
+
+                     } else {
+                         // this make will allow the Save button to return to Edit again
+                        task_input_el.removeAttribute('readonly');
+                        task_edit_el.innerHTML = 'Edit'; 
+                     }
+               });
+
+               //This is making the Delete Button functional
+               task_delete_el.addEventListener('click', () =>{
+                   list_el.removeChild(task_el);
+               });
+
+
+
+            });
+
+        });
+    </script>
+</body>
+</html>
